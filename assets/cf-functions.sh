@@ -256,6 +256,17 @@ function cf_delete() {
   fi
 }
 
+function cf_map_route() {
+  local app_name="$1"
+  local domain="$2"
+  local hostname="$3"
+  local route_path="$4"
+
+  cf map-route "$app_name" "$domain" \
+    ${hostname:+--hostname "$hostname"} \
+    ${route_path:+--path "$route_path"}
+}
+
 function cf_is_app_started() {
   local app_name=$1
   guid=$(cf app "$app_name" --guid)

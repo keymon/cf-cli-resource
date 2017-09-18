@@ -127,6 +127,13 @@ echo "$params" | jq -c '.commands[]' | while read -r options; do
     echo -e 'Executing \e[33m'"$command"$'\e[0m: '"$service_instance"
     cf_target "$org" "$space"
     cf_delete_service "$service_instance"
+  elif [ "map-route" = "$command" ]; then
+    app_name=$(echo $options | jq -r '.app_name //empty')
+    domain=$(echo $options | jq -r '.domain //empty')
+    hostname=$(echo $options | jq -r '.hostname //empty')
+    route_path=$(echo $options | jq -r '.path //empty')
+    cf_target "$org" "$space"
+    cf_map_route "$app_name" "$domain" "$hostname" "$route_path"
   elif [ "push" = "$command" ]; then
     app_name=$(echo $options | jq -r '.app_name //empty')
     hostname=$(echo $options | jq -r '.hostname //empty')
